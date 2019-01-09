@@ -1,4 +1,5 @@
 import React from 'react';
+import { checkFinish, move, changeValue } from './perm2';
 
 import './App.css';
 
@@ -8,20 +9,41 @@ class App extends React.Component {
 
 		this.state = {
 			player: 0,
-			boxes: ['', '', '', '', '', '', '', '', '', '', '', '']
+			boxes: ['', '', '', '', '', '', '', '', ''],
+			gameOver: false,
+			permutation: []
 		};
 
 		this.move = this.move.bind(this);
 	}
 
 	move(index) {
-		const playerMove = this.state.player === 0 ? 'X' : 'O';
-		let { boxes, player } = this.state;
+		if (!this.state.gameOver) {
+			const playerMove = this.state.player === 0 ? 'X' : 'O';
+			let { boxes, permutation } = this.state;
 
-		if (boxes[index] === '') {
-			player = (player + 1) % 2;
-			boxes[index] = playerMove;
-			this.setState({ boxes, player });
+			if (boxes[index] === '') {
+				boxes[index] = playerMove;
+				this.setState({ boxes }, () => {
+					const currentPermutation = this.state.boxes
+						.map(box => (box === '' ? '0' : box === 'X' ? '1' : '2'))
+						.join('');
+					if (checkFinish(currentPermutation).reply === 'Continue') {
+						const { currentPerm } = move(currentPermutation);
+
+						let boxes = currentPerm.split('');
+						boxes = boxes.map(box => (box === '0' ? '' : box === '1' ? 'X' : 'O'));
+
+						permutation.push(currentPermutation);
+						permutation.push(currentPerm);
+
+						this.setState({ boxes, permutation });
+					} else {
+						changeValue(this.state.permutation, checkFinish(currentPermutation).reply);
+						this.setState({ gameOver: true });
+					}
+				});
+			}
 		}
 	}
 
