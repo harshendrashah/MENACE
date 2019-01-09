@@ -65,12 +65,49 @@ function move(map, currentPerm){
         }
     }
     console.log(nextState, rand, probCount)
-    return nextState;
+    return checkFinish(nextState)
 }
 
 
-function checkFinish(){
-    
+function checkFinish(currentPerm){
+    if(((currentPerm[0] == '1') && (currentPerm[1] == '1') && (currentPerm[2] == '1') )  || 
+        ((currentPerm[3] == '1') && (currentPerm[4] == '1') && (currentPerm[5] == '1') ) || 
+        ((currentPerm[6] == '1') && (currentPerm[7] == '1') && (currentPerm[8] == '1') ) ||
+        ((currentPerm[0] == '1') && (currentPerm[3] == '1') && (currentPerm[6] == '1') ) || 
+        ((currentPerm[1] == '1') && (currentPerm[4] == '1') && (currentPerm[7] == '1') ) || 
+        ((currentPerm[2] == '1') && (currentPerm[5] == '1') && (currentPerm[8] == '1') ) ||
+        ((currentPerm[0] == '1') && (currentPerm[4] == '1') && (currentPerm[8] == '1') ) ||
+        ((currentPerm[2] == '1') && (currentPerm[4] == '1') && (currentPerm[6] == '1') ) ||
+         ){
+        return("Bht Undaa Khele hain app!!!"); 
+    }
+
+    else if(((currentPerm[0] == '2') && (currentPerm[1] == '2') && (currentPerm[2] == '2') )  || 
+        ((currentPerm[3] == '2') && (currentPerm[4] == '2') && (currentPerm[5] == '2') ) || 
+        ((currentPerm[6] == '2') && (currentPerm[7] == '2') && (currentPerm[8] == '2') ) ||
+        ((currentPerm[0] == '2') && (currentPerm[3] == '2') && (currentPerm[6] == '2') ) || 
+        ((currentPerm[1] == '2') && (currentPerm[4] == '2') && (currentPerm[7] == '2') ) || 
+        ((currentPerm[2] == '2') && (currentPerm[5] == '2') && (currentPerm[8] == '2') ) ||
+        ((currentPerm[0] == '2') && (currentPerm[4] == '2') && (currentPerm[8] == '2') ) ||
+        ((currentPerm[2] == '2') && (currentPerm[4] == '2') && (currentPerm[6] == '2') ) ||
+         ){
+        return("Haar toh gye ho, ab nikalo"); 
+    }
+
+    let zeroCount = 0 ;
+    for(let j in currentPerm){
+        if(currentPerm[j] == '0'){
+            zeroCount++;
+        }        
+    }
+
+    if(zeroCount == 0){
+        return("Draw");
+    }
+
+    else{
+        return("continue");
+    }    
 }
 
 // The method that prints all  
