@@ -2,7 +2,7 @@
 
 Machine Educable Noughts And Crosses Engine (MENACE) teaches a bunch of matchboxes how to play tic-tac-toe.
 
-![Screenshot](./screenshot.png)
+![Screenshot](./ss.png)
 
 ## Team
 
