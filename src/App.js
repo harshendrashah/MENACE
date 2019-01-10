@@ -11,13 +11,14 @@ class App extends React.Component {
 			player: 0,
 			boxes: ['', '', '', '', '', '', '', '', ''],
 			gameOver: false,
-			permutation: []
+			permutation: [],
+			winner: ''
 		};
 
-		this.move = this.move.bind(this);
+		this.movePlayer = this.movePlayer.bind(this);
 	}
 
-	move(index) {
+	movePlayer(index) {
 		if (!this.state.gameOver) {
 			const playerMove = this.state.player === 0 ? 'X' : 'O';
 			let { boxes, permutation } = this.state;
@@ -29,7 +30,7 @@ class App extends React.Component {
 						.map(box => (box === '' ? '0' : box === 'X' ? '1' : '2'))
 						.join('');
 					if (checkFinish(currentPermutation).reply === 'Continue') {
-						const { currentPerm } = move(currentPermutation);
+						const { currentPerm, reply } = move(currentPermutation);
 
 						let boxes = currentPerm.split('');
 						boxes = boxes.map(box => (box === '0' ? '' : box === '1' ? 'X' : 'O'));
@@ -37,14 +38,22 @@ class App extends React.Component {
 						permutation.push(currentPermutation);
 						permutation.push(currentPerm);
 
+						if (reply !== 'Continue') {
+							changeValue(this.state.permutation, reply);
+							this.setState({ gameOver: true, winner: reply });
+						}
 						this.setState({ boxes, permutation });
 					} else {
 						changeValue(this.state.permutation, checkFinish(currentPermutation).reply);
-						this.setState({ gameOver: true });
+						this.setState({ gameOver: true, winner: checkFinish(currentPermutation).reply });
 					}
 				});
 			}
 		}
+	}
+
+	reload() {
+		window.location.reload();
 	}
 
 	render() {
@@ -52,37 +61,47 @@ class App extends React.Component {
 			<div className="board">
 				<h1 className="heading">MENACE</h1>
 				<div className="row">
-					<div className="box box0" onClick={() => this.move(0)}>
+					<div className="box box0" onClick={() => this.movePlayer(0)}>
 						{this.state.boxes[0]}
 					</div>
-					<div className="box box1" onClick={() => this.move(1)}>
+					<div className="box box1" onClick={() => this.movePlayer(1)}>
 						{this.state.boxes[1]}
 					</div>
-					<div className="box box2" onClick={() => this.move(2)}>
+					<div className="box box2" onClick={() => this.movePlayer(2)}>
 						{this.state.boxes[2]}
 					</div>
 				</div>
 				<div className="row">
-					<div className="box box3" onClick={() => this.move(3)}>
+					<div className="box box3" onClick={() => this.movePlayer(3)}>
 						{this.state.boxes[3]}
 					</div>
-					<div className="box box4" onClick={() => this.move(4)}>
+					<div className="box box4" onClick={() => this.movePlayer(4)}>
 						{this.state.boxes[4]}
 					</div>
-					<div className="box box5" onClick={() => this.move(5)}>
+					<div className="box box5" onClick={() => this.movePlayer(5)}>
 						{this.state.boxes[5]}
 					</div>
 				</div>
 				<div className="row">
-					<div className="box box6" onClick={() => this.move(6)}>
+					<div className="box box6" onClick={() => this.movePlayer(6)}>
 						{this.state.boxes[6]}
 					</div>
-					<div className="box box7" onClick={() => this.move(7)}>
+					<div className="box box7" onClick={() => this.movePlayer(7)}>
 						{this.state.boxes[7]}
 					</div>
-					<div className="box box18" onClick={() => this.move(8)}>
+					<div className="box box18" onClick={() => this.movePlayer(8)}>
 						{this.state.boxes[8]}
 					</div>
+				</div>
+				<div className="winner">
+					{this.state.winner !== ''
+						? this.state.winner === 'Draw'
+							? this.state.winner
+							: `You ${this.state.winner}`
+						: null}
+				</div>
+				<div className="reload">
+					<button onClick={this.reload}>Reload</button>
 				</div>
 			</div>
 		);
