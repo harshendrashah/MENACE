@@ -12,12 +12,12 @@
 	justify-content: center;
 	align-items: center;
 	background-color: #355cfc;
+	font-family: 'Roboto';
 }
 
 .heading {
 	text-align: center;
 	margin-bottom: 100px;
-	font-family: 'Roboto';
 	font-weight: 300;
 	color: #ffffff;
 }
@@ -34,6 +34,7 @@
 	align-items: center;
 	font-size: 25px;
 	color: #ffffff;
+	cursor: pointer;
 }
 
 .box0,
@@ -52,4 +53,34 @@
 .box6,
 .box7 {
 	border-right: 1px solid #ffffff;
+}
+
+.winner {
+	text-align: center;
+	font-size: 24px;
+	font-weight: 300;
+	color: #ffffff;
+	margin-top: 50px;
+}
+
+.reload {
+	margin-top: 50px;
+	text-align: center;
+}
+
+.reload button {
+	cursor: pointer;
+	padding: 0.5em 1em;
+	background-color: #ffffff;
+	color: #355cfc;
+	border: none;
+	border-radius: 3px;
+	transition: all 0.3s;
+	font-size: 20px;
+}
+
+.reload button:hover {
+	background-color: #355cfc;
+	color: #ffffff;
+	border: 1px solid #ffffff;
 }

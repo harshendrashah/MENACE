@@ -1,6 +1,7 @@
+let map = {};
+
 export function changeValue(steps, actionType) {
 	let i, j;
-	console.log(steps);
 
 	switch (actionType) {
 		case 'Win':
@@ -8,7 +9,7 @@ export function changeValue(steps, actionType) {
 				if (i !== steps.length - 1) {
 					for (j in map[steps[i]].val) {
 						if (map[steps[i]].val[j].perm === steps[i + 1]) {
-							map[steps[i]].val[j].value += 3;
+							map[steps[i]].val[j].value -= 1;
 						}
 					}
 				}
@@ -32,15 +33,17 @@ export function changeValue(steps, actionType) {
 				if (i !== steps.length - 1) {
 					for (j in map[steps[i]].val) {
 						if (map[steps[i]].val[j].perm === steps[i + 1]) {
-							map[steps[i]].val[j].value -= 1;
+							map[steps[i]].val[j].value += 3;
 						}
 					}
 				}
 			}
 			break;
+
 		default:
 			return;
 	}
+
 	localStorage.setItem('data', JSON.stringify(map));
 
 	return map;
@@ -69,7 +72,6 @@ export function move(currentPerm) {
 }
 
 export function checkFinish(currentPerm) {
-	console.log(currentPerm);
 	if (
 		(currentPerm[0] === '1' && currentPerm[1] === '1' && currentPerm[2] === '1') ||
 		(currentPerm[3] === '1' && currentPerm[4] === '1' && currentPerm[5] === '1') ||
@@ -94,7 +96,8 @@ export function checkFinish(currentPerm) {
 		(currentPerm[2] === '2' && currentPerm[4] === '2' && currentPerm[6] === '2')
 	) {
 		return {
-			reply: 'Lose'
+			reply: 'Lose',
+			currentPerm
 		};
 	}
 
@@ -117,55 +120,56 @@ export function checkFinish(currentPerm) {
 	}
 }
 
-// The method that prints all
-// possible strings of length k.
-// It is mainly a wrapper over
-// recursive function printAllKLengthRec()
-function printAllKLength(set, k) {
-	let n = set.length;
-	printAllKLengthRec(set, '', n, k);
-}
-
-// The main recursive method
-// to print all possible
-// strings of length k
-function printAllKLengthRec(set, prefix, n, k) {
-	// Base case: k is 0,
-	// print prefix
-	if (k === 0) {
-		//console.log(prefix)
-		perm.push(prefix);
-		return;
+if (localStorage.getItem('data')) {
+	map = Object.assign({}, JSON.parse(localStorage.getItem('data')));
+} else {
+	// The method that prints all
+	// possible strings of length k.
+	// It is mainly a wrapper over
+	// recursive function printAllKLengthRec()
+	function printAllKLength(set, k) {
+		let n = set.length;
+		printAllKLengthRec(set, '', n, k);
 	}
 
-	// One by one add all characters
-	// from set and recursively
-	// call for k equals to k-1
-	for (let i = 0; i < n; ++i) {
-		// Next character of input added
-		let newPrefix = `${prefix}${set[i]}`;
-		// k is decreased, because
-		// we have added a new character
-		printAllKLengthRec(set, newPrefix, n, k - 1);
-	}
-}
+	// The main recursive method
+	// to print all possible
+	// strings of length k
+	function printAllKLengthRec(set, prefix, n, k) {
+		// Base case: k is 0,
+		// print prefix
+		if (k === 0) {
+			perm.push(prefix);
+			return;
+		}
 
-let perm = [];
-let set = ['1', '2', '0'];
-printAllKLength(set, 9);
-
-let map = {};
-
-for (let i in perm) {
-	let count = 0;
-	let val = [];
-	for (let j = 0; j < perm[i].length; j++) {
-		if (perm[i][j] === '0') {
-			let valString = perm[i].slice(0, j) + '2' + perm[i].slice(j + 1, perm[i].length);
-			val.push({ perm: valString, value: 4 });
-			count++;
+		// One by one add all characters
+		// from set and recursively
+		// call for k equals to k-1
+		for (let i = 0; i < n; ++i) {
+			// Next character of input added
+			let newPrefix = `${prefix}${set[i]}`;
+			// k is decreased, because
+			// we have added a new character
+			printAllKLengthRec(set, newPrefix, n, k - 1);
 		}
 	}
 
-	map[perm[i]] = { count: count, val: val };
+	let perm = [];
+	let set = ['1', '2', '0'];
+	printAllKLength(set, 9);
+
+	for (let i in perm) {
+		let count = 0;
+		let val = [];
+		for (let j = 0; j < perm[i].length; j++) {
+			if (perm[i][j] === '0') {
+				let valString = perm[i].slice(0, j) + '2' + perm[i].slice(j + 1, perm[i].length);
+				val.push({ perm: valString, value: 4 });
+				count++;
+			}
+		}
+
+		map[perm[i]] = { count: count, val: val };
+	}
 }
