@@ -12,10 +12,73 @@ class App extends React.Component {
 			boxes: ['', '', '', '', '', '', '', '', ''],
 			gameOver: false,
 			permutation: [],
-			winner: ''
+			permutation2: [],
+			winner: '',
+			train: false
 		};
 
 		this.movePlayer = this.movePlayer.bind(this);
+		this.train = this.train.bind(this);
+	}
+
+	train() {
+		const { train } = this.state;
+
+		this.setState({ train: !train }, () => {
+			if (this.state.train) {
+				for (let i = 0; i < 2000; i++) {
+					const state = '000000000';
+
+					let currentMove = {
+						reply: checkFinish(state).reply,
+						currentPerm: ''
+					};
+
+					while (currentMove.reply === 'Continue') {
+						currentMove = { ...move(state, '1') };
+
+						const { permutation } = this.state;
+						permutation.push(state);
+						permutation.push(currentMove.currentPerm);
+
+						this.setState({ permutation });
+
+						if (reply === 'Continue') {
+							const { permutation2 } = this.state;
+							permutation2.push(currentMove.currentPerm);
+							currentMove = { ...move(currentMove.currentPerm, '2') };
+							permutation2.push(currentMove.currentPerm);
+
+							state = currentMove.currentPerm;
+
+							this.setState({ permutation2 });
+
+							if (reply !== 'Continue') {
+								if (reply === 'Won') {
+									changeValue(this.state.permutation, 'Won');
+									changeValue(this.state.permutation2, 'Lose');
+								} else {
+									changeValue(this.state.permutation, 'Lose');
+									changeValue(this.state.permutation2, 'Won');
+								}
+								this.setState({ gameOver: true, winner: checkFinish(currentPermutation).reply });
+								break;
+							}
+						} else {
+							if (reply === 'Won') {
+								changeValue(this.state.permutation, 'Won');
+								changeValue(this.state.permutation2, 'Lose');
+							} else {
+								changeValue(this.state.permutation, 'Lose');
+								changeValue(this.state.permutation2, 'Won');
+							}
+							this.setState({ gameOver: true, winner: checkFinish(currentPermutation).reply });
+							break;
+						}
+					}
+				}
+			}
+		});
 	}
 
 	movePlayer(index) {
@@ -102,6 +165,7 @@ class App extends React.Component {
 				</div>
 				<div className="reload">
 					<button onClick={this.reload}>Reload</button>
+					<button onClick={this.train}>MENACE Vs. MENACE</button>
 				</div>
 			</div>
 		);

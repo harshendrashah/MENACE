@@ -49,7 +49,7 @@ export function changeValue(steps, actionType) {
 	return map;
 }
 
-export function move(currentPerm) {
+export function move(currentPerm, turn) {
 	let nextState = '';
 	let i,
 		tot = 0;
@@ -57,7 +57,9 @@ export function move(currentPerm) {
 	let probCount = 0;
 
 	for (i in map[currentPerm].val) {
-		tot += map[currentPerm].val[i].value;
+		if (map[currentPerm].val[i].turn === turn) {
+			tot += map[currentPerm].val[i].value;
+		}
 	}
 
 	for (i in map[currentPerm].val) {
@@ -165,7 +167,9 @@ if (localStorage.getItem('data')) {
 		for (let j = 0; j < perm[i].length; j++) {
 			if (perm[i][j] === '0') {
 				let valString = perm[i].slice(0, j) + '2' + perm[i].slice(j + 1, perm[i].length);
-				val.push({ perm: valString, value: 4 });
+				let valString2 = perm[i].slice(0, j) + '1' + perm[i].slice(j + 1, perm[i].length);
+				val.push({ perm: valString, value: 4, turn: '2' });
+				val.push({ perm: valString2, value: 4, turn: '1' });
 				count++;
 			}
 		}
