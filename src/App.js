@@ -43,7 +43,7 @@ class App extends React.Component {
 
 						this.setState({ permutation });
 
-						if (reply === 'Continue') {
+						if (currentMove.reply === 'Continue') {
 							const { permutation2 } = this.state;
 							permutation2.push(currentMove.currentPerm);
 							currentMove = { ...move(currentMove.currentPerm, '2') };
@@ -53,26 +53,26 @@ class App extends React.Component {
 
 							this.setState({ permutation2 });
 
-							if (reply !== 'Continue') {
-								if (reply === 'Won') {
+							if (currentMove.reply !== 'Continue') {
+								if (currentMove.reply === 'Won') {
 									changeValue(this.state.permutation, 'Won');
 									changeValue(this.state.permutation2, 'Lose');
 								} else {
 									changeValue(this.state.permutation, 'Lose');
 									changeValue(this.state.permutation2, 'Won');
 								}
-								this.setState({ gameOver: true, winner: checkFinish(currentPermutation).reply });
+								this.setState({ gameOver: true, winner: checkFinish(currentMove.currentPerm).reply });
 								break;
 							}
 						} else {
-							if (reply === 'Won') {
+							if (currentMove.reply === 'Won') {
 								changeValue(this.state.permutation, 'Won');
 								changeValue(this.state.permutation2, 'Lose');
 							} else {
 								changeValue(this.state.permutation, 'Lose');
 								changeValue(this.state.permutation2, 'Won');
 							}
-							this.setState({ gameOver: true, winner: checkFinish(currentPermutation).reply });
+							this.setState({ gameOver: true, winner: checkFinish(currentMove.currentPerm).reply });
 							break;
 						}
 					}
