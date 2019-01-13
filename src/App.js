@@ -12,87 +12,10 @@ class App extends React.Component {
 			boxes: ['', '', '', '', '', '', '', '', ''],
 			gameOver: false,
 			permutation: [],
-			permutation2: [],
-			winner: '',
-			train: false
+			winner: ''
 		};
 
 		this.movePlayer = this.movePlayer.bind(this);
-		this.train = this.train.bind(this);
-	}
-
-	train() {
-		const { train } = this.state;
-
-		this.setState({ train: !train }, () => {
-			if (this.state.train) {
-				for (let i = 0; i < 2000; i++) {
-					const state = '000000000';
-
-					console.log("i:",i)
-
-					let currentMove = {
-						reply: checkFinish(state).reply,
-						currentPerm: ''
-					};
-
-					while (currentMove.reply === 'Continue') {
-						console.log(currentMove.reply)
-						currentMove = { ...move(state, '1') };
-
-						const { permutation } = this.state;
-						permutation.push(state);
-						permutation.push(currentMove.currentPerm);
-
-						this.setState({ permutation });
-
-						if (currentMove.reply === 'Continue') {
-							const { permutation2 } = this.state;
-							permutation2.push(currentMove.currentPerm);
-							currentMove = { ...move(currentMove.currentPerm, '2') };
-							permutation2.push(currentMove.currentPerm);
-
-							state = currentMove.currentPerm;
-
-							this.setState({ permutation2 });
-
-							if (currentMove.reply !== 'Continue') {
-								if (currentMove.reply === 'Won') {
-									changeValue(this.state.permutation, 'Won');
-									changeValue(this.state.permutation2, 'Lose');
-								} 
-								else if(currentMove.reply === 'Lose'){
-									changeValue(this.state.permutation, 'Lose');
-									changeValue(this.state.permutation2, 'Won');
-								}
-								else{
-									changeValue(this.state.permutation, 'Draw');
-									changeValue(this.state.permutation2, 'Draw');
-								}
-								this.setState({ gameOver: true, winner: checkFinish(currentMove.currentPerm).reply });
-								break;
-							}
-						} else {
-							if (currentMove.reply === 'Won') {
-								changeValue(this.state.permutation, 'Won');
-								changeValue(this.state.permutation2, 'Lose');
-							}
-							else if(currentMove.reply === 'Lose'){
-								changeValue(this.state.permutation, 'Lose');
-								changeValue(this.state.permutation2, 'Won');
-							}
-							else{
-									changeValue(this.state.permutation, 'Draw');
-									changeValue(this.state.permutation2, 'Draw');
-								}
-
-							this.setState({ gameOver: true, winner: checkFinish(currentMove.currentPerm).reply });
-							break;
-						}
-					}
-				}
-			}
-		});
 	}
 
 	movePlayer(index) {
@@ -107,7 +30,7 @@ class App extends React.Component {
 						.map(box => (box === '' ? '0' : box === 'X' ? '1' : '2'))
 						.join('');
 					if (checkFinish(currentPermutation).reply === 'Continue') {
-						const { currentPerm, reply } = move(currentPermutation,"2");
+						const { currentPerm, reply } = move(currentPermutation);
 
 						let boxes = currentPerm.split('');
 						boxes = boxes.map(box => (box === '0' ? '' : box === '1' ? 'X' : 'O'));
@@ -179,7 +102,6 @@ class App extends React.Component {
 				</div>
 				<div className="reload">
 					<button onClick={this.reload}>Reload</button>
-					<button onClick={this.train}>MENACE Vs. MENACE</button>
 				</div>
 			</div>
 		);
