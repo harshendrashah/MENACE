@@ -24,6 +24,10 @@ npm start
 
 - [NodeJS](https://nodejs.org)
 
+### Note
+
+The Training data is stored in the brower's Local  Storage.
+
 ## Team
 
 - [Harshendra Shah](https://github.com/harshendrashah)
