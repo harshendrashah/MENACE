@@ -29,12 +29,15 @@ class App extends React.Component {
 				for (let i = 0; i < 2000; i++) {
 					const state = '000000000';
 
+					console.log("i:",i)
+
 					let currentMove = {
 						reply: checkFinish(state).reply,
 						currentPerm: ''
 					};
 
 					while (currentMove.reply === 'Continue') {
+						console.log(currentMove.reply)
 						currentMove = { ...move(state, '1') };
 
 						const { permutation } = this.state;
@@ -57,9 +60,14 @@ class App extends React.Component {
 								if (currentMove.reply === 'Won') {
 									changeValue(this.state.permutation, 'Won');
 									changeValue(this.state.permutation2, 'Lose');
-								} else {
+								} 
+								else if(currentMove.reply === 'Lose'){
 									changeValue(this.state.permutation, 'Lose');
 									changeValue(this.state.permutation2, 'Won');
+								}
+								else{
+									changeValue(this.state.permutation, 'Draw');
+									changeValue(this.state.permutation2, 'Draw');
 								}
 								this.setState({ gameOver: true, winner: checkFinish(currentMove.currentPerm).reply });
 								break;
@@ -68,10 +76,16 @@ class App extends React.Component {
 							if (currentMove.reply === 'Won') {
 								changeValue(this.state.permutation, 'Won');
 								changeValue(this.state.permutation2, 'Lose');
-							} else {
+							}
+							else if(currentMove.reply === 'Lose'){
 								changeValue(this.state.permutation, 'Lose');
 								changeValue(this.state.permutation2, 'Won');
 							}
+							else{
+									changeValue(this.state.permutation, 'Draw');
+									changeValue(this.state.permutation2, 'Draw');
+								}
+
 							this.setState({ gameOver: true, winner: checkFinish(currentMove.currentPerm).reply });
 							break;
 						}
@@ -93,7 +107,7 @@ class App extends React.Component {
 						.map(box => (box === '' ? '0' : box === 'X' ? '1' : '2'))
 						.join('');
 					if (checkFinish(currentPermutation).reply === 'Continue') {
-						const { currentPerm, reply } = move(currentPermutation);
+						const { currentPerm, reply } = move(currentPermutation,"2");
 
 						let boxes = currentPerm.split('');
 						boxes = boxes.map(box => (box === '0' ? '' : box === '1' ? 'X' : 'O'));
